@@ -1,0 +1,11 @@
+.btn-employee-reg{
+    padding: 10px 30px;
+    border-radius: 50px;
+    width: 100%;
+    background-color: #dfb954;
+    border: none;
+    margin-top: 20px;
+}
+.alert.alert-success {
+    margin-top: 10px;
+}

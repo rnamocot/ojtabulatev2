@@ -1,0 +1,196 @@
+body{
+    font-family: 'Inter';
+    overflow-x: hidden;
+}
+#logo{
+    height: 50px;
+}
+.navbar{
+    padding: 10px 30px;
+}
+i {
+    margin-right: 10px;
+}
+.bi-person-circle {
+    color: #081c7e !important;
+}
+
+.bi-qr-code{
+    color: #081c7e !important;
+}
+i.bi.bi-telephone-fill {
+    color: #1f8b9d;
+}
+i.bi.bi-envelope {
+    color: #ff0f0f;
+}
+i.bi.bi-person-fill {
+    color: #765700;
+}
+h3.login-user-name {
+    font-size: 18px;
+}
+.user-name-top {
+    margin-left: 20px;
+}
+span.login-user-span {
+    color: #c9a444;
+    margin-right: 10px;
+}
+#logout {
+    background-color: #dab550;
+    border-radius: 10px;
+    padding: 10px 20px;
+    color: #fff;
+}
+.table-content{
+    padding: 50px;
+}
+.db-main{
+    padding: 35px;
+    border-radius: 10px;
+    margin: 50px;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+    -webkit-box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+    -moz-box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+    border-radius: 30px;
+}
+.db-main h2 {
+    font-size: 20px;
+    color: #141310;
+    font-weight: 700;
+}
+table{
+    width: 100%;
+}
+th {
+    background-color: #c7c7c7;
+    color: #03062e;
+    padding: 20px;
+}
+
+th, td {
+    padding: 8px 30px;
+
+}
+tr{
+    font-size: 14px;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  tr:nth-child(odd) {
+    background-color: #c7c7c7;
+  }
+.table-content {
+    padding: 30px 0px;
+}
+#supervisor-email{
+    text-transform: lowercase;
+}
+
+#supervisor-email a,#supervisor-phone a {
+    text-decoration: none;
+    color: #1e1ead;
+    font-weight: 500;
+}
+p#current-status {
+    text-align: center;
+    font-size: 13px;
+    width: 60%;
+    margin-bottom: 2px;
+    color: #000000;
+    padding: 0px;
+}
+button#btn-status {
+    font-size: 12px;
+    background-color: transparent !important;
+    margin: 0px auto;
+    color: #05080c;
+    border: none;
+    text-align: center;
+  }
+  
+  button#btn-status[data-bs-toggle="dropdown"][aria-expanded="false"]:not(:empty):before {
+    content: "";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    vertical-align: middle;
+  }
+  
+  button#btn-status[data-bs-toggle="dropdown"][aria-expanded="false"]:not(:empty):after {
+    content: "New Contact";
+    display: inline-block;
+    vertical-align: middle;
+    color: green;
+  }
+  button#btn-set-status {
+    background-color: #dab550;
+    border-radius: 10px;
+    padding: 10px 20px;
+    color: #fff;
+    border: none;
+}
+select#status {
+    padding: 10px 8px;
+    border: 1px solid #343468;
+}
+.frm-status {
+    text-align: center;
+}
+button#btn-qck {
+    font-size: 14px;
+    background-color: #dab550;
+    border: none;
+    color: #070808;
+}
+.dropdown a {
+    text-decoration: none;
+    color: #0c0a0a;
+    font-size: 15px;
+}
+.dropdown-menu a {
+    text-decoration: none;
+    color: #0c0a0a;
+    font-size: 15px;
+}
+ul.dropdown-menu.show {
+    padding: 10px;
+}
+/* qr code */
+#qr-code{
+        font-size: 20px;
+        color: #2e4c7a;
+}
+#qr-code h4 {
+    font-size: 16px;
+    padding: 20px;
+    background-color: #dfbd63;
+    border-radius: 10px;
+}
+button#save_btn {
+    margin-top: 20px;
+    padding: 10px 30px;
+    border: none;
+    background-color: #0d6efd;
+    color: #fff;
+    border-radius: 10px;
+}
+#qr-code-modal{
+    text-align: center;
+}
+#qr-code img {
+    height: auto;
+    width: 100%;
+}
+#qr-h1{
+    font-size: 20px;
+}
+
+
+footer {
+    text-align: center;
+    background-color: #dab550;
+    padding: 20px;
+}

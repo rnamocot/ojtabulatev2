@@ -74,18 +74,14 @@ if (isset($_POST['btn-edit-profile'])) {
 
 //Update status
 
-if (isset($_POST['btn-set-status'])) {
-    // Get the form data
-    $new_status = $_POST['status'];
-
-    // Update the employee in the database
-    $sql = "UPDATE ojt_employee SET ojt_employee_status='$new_status' WHERE ojt_teachers_id='$user_id'";
+if(isset($_POST['btn-set-status'])) {
+    $status = mysqli_real_escape_string($conn, $_POST['status']);
+    $ojt_employee_id = mysqli_real_escape_string($conn, $_POST['ojt_employee_id']);
+  
+    $sql = "UPDATE ojt_employee SET ojt_employee_status='$status' WHERE ojt_employee_id='$ojt_employee_id'";
     $result = mysqli_query($conn, $sql);
-
-    // Check if the update was successful
-    if ($result) {
-        header("dashboard.php");
-        exit();
+    if($result) {
+        header("location: dashboard.php");
     } else {
         echo "Error updating record: " . mysqli_error($conn);
     }
@@ -118,7 +114,8 @@ if (isset($_POST['btn-set-status'])) {
                 <img id="logo" src="./assets/images/logonew.png" alt="Logo" class="d-inline-block align-text-top">
             </a>
             <div class="user-name-top">
-            <h3 class="login-user-name"><span class="login-user-span">Login user:</span><?php echo $username; ?></h3>
+                <h3 class="login-user-name"><span class="login-user-span">Login user:</span><?php echo $username; ?>
+                </h3>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar">
                 <span class="navbar-toggler-icon"></span>
@@ -163,11 +160,14 @@ if (isset($_POST['btn-set-status'])) {
                             <?php
                             while ($row = mysqli_fetch_assoc($employer_list)) {
                                 echo "<tr>
-                                <td id='supervisor-details'><i class='bi bi-person-fill'></i>" . $row['ojt_employee_name'] . "<br></td>
+                                <td id='supervisor-details'><i class='bi bi-info-circle-fill'></i>" . $row['ojt_employee_name'] . "<br>
+                                  <button class='btn btn-primary'data-bs-toggle='modal' data-bs-target='#viewnote-modal' id='btn-viewnote' type='button'><i class='bi bi-file-earmark-text-fill'></i> View Note</button>
+                                </td>
                                 <td id='supervisor-phone'><i class='bi bi-telephone-fill'></i><a href='tel:" . $row['ojt_employee_phone'] . "'>" . $row['ojt_employee_phone'] . "</a></td>
-                                <td id='supervisor-email'><i class='bi bi-envelope'></i><a href='mailto:" . $row['ojt_employee_email'] . "'>" . $row['ojt_employee_email'] . "</a></td>
+                                <td id='supervisor-email'><i class='bi bi-envelope-at-fill'></i><a href='mailto:" . $row['ojt_employee_email'] . "'>" . $row['ojt_employee_email'] . "</a></td>
                                 <td id='ojt-employee-status'>
-                                        <button class='btn btn-primary dropdown-toggle' id='btn-status' type='button' data-bs-toggle='modal' data-bs-target='#edit-status-modal' >" . $row['ojt_employee_status'] . "<span class='caret'></span></button>
+                                   <button class='btn btn-status-db btn-primary dropdown-toggle' id='btn-status-". $row['ojt_employee_id'] ."' type='button' data-bs-toggle='modal' data-bs-target='#edit-status-modal' data-ojt-employee-id='". $row['ojt_employee_id'] ."'>". $row['ojt_employee_status'] ."<span class='caret'></span></button>
+                                </td>
                                     </div>
                                 </td>
                                 <td id='ojt-employee-quick-actions'>
@@ -243,22 +243,40 @@ if (isset($_POST['btn-set-status'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                <div class="frm-status">
-                <form method="POST">
-                    <label for="status">Set New Status:</label>
-                    <div class="select-col">
-                    <select id="status" name="status">
-                       <option value="New Contact">New Contact</option>
-                        <option value="Attempted Contact">Attempted Contact</option>
-                        <option value="Contacted">Contacted</option>
-                        <option value="Appointment Set">Appointment Set</option>
-                        <option value="Appointment Met">Appointment Met</option>
-                    </select>
+                    <div class="frm-status">
+                        <form method="POST">
+                            <input type="hidden" id="ojt_employee_id" name="ojt_employee_id" value="">
+                            <label for="status">Set New Status:</label>
+                            <div class="select-col">
+                                <select id="status" name="status">
+                                    <option value="New Contact">New Contact</option>
+                                    <option value="Attempted Contact">Attempted Contact</option>
+                                    <option value="Contacted">Contacted</option>
+                                    <option value="Appointment Set">Appointment Set</option>
+                                    <option value="Appointment Met">Appointment Met</option>
+                                </select>
+                            </div>
+                            <br>
+                            <button id="btn-set-status" name="btn-set-status" type="submit">Update Status</button>
+                        </form>
                     </div>
-                    <br>
-                    <button id="btn-set-status" name="btn-set-status"type="submit">Update Status</button>
-                    </form>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Note modal -->
+    <div class="modal fade" id="viewnote-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Status</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="note-contents">
+                    </div>
                 </div>
             </div>
         </div>
@@ -340,9 +358,37 @@ if (isset($_POST['btn-set-status'])) {
     <!-- Qr code -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    //code to pass the value status to status modal
+    $(document).ready(function() {
+        // listen for click event on the status button
+        $('[id^="btn-status-"]').click(function() {
+            // get the ojt_employee_id value from the data attribute
+            var ojt_employee_id = $(this).data('ojt-employee-id');
 
+            // set the value of the hidden input field in the form modal
+            $('#ojt_employee_id').val(ojt_employee_id);
+        });
+    });
 
+    // code to change status color depending on the value
 
+    $(document).ready(function() {
+        $('.btn-status-db').each(function() {
+            const $button = $(this);
+            const buttonText = $button.text().trim();
+            if (buttonText === "New Contact") {
+                $button.css('color', 'red');
+            } else if (buttonText === "Attempted Contact") {
+                $button.css('color', 'blue');
+            } else if (buttonText === "Contacted") {
+                $button.css('color', '#1f8b9d');
+            } else if (buttonText === "Appointment Set" || buttonText === "Appointment Met") {
+                $button.css('color', '#765700');
+            }
+        });
+    });
+    </script>
 
 </body>
 

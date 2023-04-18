@@ -51,4 +51,5 @@ function updateStatus($employee_id, $new_status){
     return $result;
 }
 
+
 ?>

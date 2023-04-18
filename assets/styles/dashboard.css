@@ -21,11 +21,11 @@ i {
 i.bi.bi-telephone-fill {
     color: #1f8b9d;
 }
-i.bi.bi-envelope {
-    color: #ff0f0f;
+i.bi.bi-envelope-at-fill {
+    color: #9d4987;
 }
-i.bi.bi-person-fill {
-    color: #765700;
+i.bi.bi-info-circle-fill{
+    color: #031b32;
 }
 h3.login-user-name {
     font-size: 18px;
@@ -46,7 +46,7 @@ span.login-user-span {
 .table-content{
     padding: 50px;
 }
-.db-main{
+.db-main {
     padding: 35px;
     border-radius: 10px;
     margin: 50px;
@@ -54,11 +54,30 @@ span.login-user-span {
     -webkit-box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
     -moz-box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
     border-radius: 30px;
+    /* background: url(../images/bg2.jpg); */
+    background-size: cover;
+    background-color: #adb5bd;
 }
 .db-main h2 {
     font-size: 20px;
     color: #141310;
     font-weight: 700;
+    margin-bottom: 15px;
+}
+button#btn-viewnote {
+    padding: 0px;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: transparent;
+    border: none;
+    color: #1f8b9d;
+    margin-top: 8px;
+}
+i.bi.bi-file-earmark-text-fill {
+    color: #b5870a;
+}
+td#supervisor-details {
+    font-weight: 600;
 }
 table{
     width: 100%;
@@ -91,7 +110,7 @@ tr:nth-child(even) {
 
 #supervisor-email a,#supervisor-phone a {
     text-decoration: none;
-    color: #1e1ead;
+    color: #235b95;
     font-weight: 500;
 }
 p#current-status {
@@ -102,13 +121,14 @@ p#current-status {
     color: #000000;
     padding: 0px;
 }
-button#btn-status {
+.btn-status-db {
     font-size: 12px;
     background-color: transparent !important;
     margin: 0px auto;
     color: #05080c;
     border: none;
     text-align: center;
+    font-weight: 700;
   }
   
   button#btn-status[data-bs-toggle="dropdown"][aria-expanded="false"]:not(:empty):before {

@@ -46,6 +46,23 @@ span.login-user-span {
 .table-content{
     padding: 50px;
 }
+.profile-row-sec {
+
+    padding: 35px;
+    border-radius: 10px;
+    margin: 10px;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+    -webkit-box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+    -moz-box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+    border-radius: 30px;
+}
+span.profile-info {
+    color: #c7a345;
+    margin-right: 5px;
+}
+.profile-row-sec h4 {
+    font-size: 16px;
+}
 .db-main {
     padding: 35px;
     border-radius: 10px;

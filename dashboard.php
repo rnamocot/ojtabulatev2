@@ -204,11 +204,19 @@ if(isset($_POST['btn-set-status'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to logout?
+                <div class="profile-row-sec">
+                    <h4><span class="profile-info">Name:</span><?php echo $teacher_row['ojt_full_name']; ?></h4> <br>
+                    <h4><span class="profile-info">Username:</span><?php echo $teacher_row['ojt_teachers_username']; ?>
+                    </h4> <br>
+                    <h4><span class="profile-info">Phone:</span> <?php echo $teacher_row['ojt_teachers_phone']; ?> </h4><br>
+                    <h4><span class="profile-info">Email:</span><?php echo $teacher_row['ojt_teachers_email']; ?></h4>
+                    <!-- <br>
+                    <button class="trigger btn-btn-primary" id="btn-edit-profile">Edit</button>
+                    <br> -->
+                </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Logout</button>
                 </div>
             </div>
         </div>

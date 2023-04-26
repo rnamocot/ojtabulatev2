@@ -86,6 +86,78 @@ if(isset($_POST['btn-set-status'])) {
         echo "Error updating record: " . mysqli_error($conn);
     }
 }
+// Add notes
+// Check if the form has been submitted
+if (isset($_POST['btn-add-note'])) {
+    // Get the employer ID from the form
+    $employer_id = $_POST['employer_id'];
+  
+    // Get the note contents from the form
+    $note_contents = $_POST['note_contents'];
+  
+    // Check if the note contents is not empty
+    if (!empty($note_contents)) {
+        // Check for errors
+        if ($conn->connect_error) {
+            die('Connection failed: ' . $conn->connect_error);
+        }
+      
+        // Prepare the SQL query
+        $stmt = $conn->prepare("INSERT INTO ojt_employee_notes (ojt_employee_note_contents,ojt_employee_id) VALUES (?, ?)");
+      
+        // Bind the parameters to the query
+        $stmt->bind_param("ss", $note_contents, $employer_id);
+      
+        // Execute the query
+        if ($stmt->execute()) {
+            // The note was added successfully
+            $addnote_msg = "Note added successfully!";
+        } else {
+            // There was an error adding the note
+            $addnote_msg = "Error adding note: " . $stmt->error;
+        }
+      
+        // Close the statement and connection
+        $stmt->close();
+        $conn->close();
+    } else {
+        // Note contents is empty
+        $addnote_msg = "Note contents cannot be empty!";
+    }
+}
+
+// View Notes
+
+
+// Check if the "View Note" button was clicked
+if (isset($_POST['btn-view-note'])) {
+  // Get the employee ID from the clicked button's data attribute
+  $employee_id = $_POST['data-row-id'];
+
+  // Prepare a SELECT query to retrieve the note contents for the specified employee ID
+  $sql = "SELECT ojt_employee_note_contents
+          FROM ojt_employee_notes
+          WHERE ojt_employee_id = $employee_id";
+
+  // Check if any rows were returned
+  if (mysqli_num_rows($result) > 0) {
+    // Retrieve the note contents from the first row of the result
+    $row = mysqli_fetch_assoc($result);
+    $note_contents = $row['ojt_employee_note_contents'];
+
+    // Display the note contents in the "note-contents" div inside the "View Note" modal
+    echo "<script>
+            document.querySelector('#viewnote-modal .note-contents').innerHTML = '$note_contents';
+          </script>";
+  } else {
+    // No rows were returned, display an error message
+    echo "<div class='alert alert-danger' role='alert'>No note found for employee ID $employee_id.</div>";
+  }
+
+  // Close the database connection
+  mysqli_close($conn);
+}
+
 
 
 ?>
@@ -161,7 +233,9 @@ if(isset($_POST['btn-set-status'])) {
                             while ($row = mysqli_fetch_assoc($employer_list)) {
                                 echo "<tr>
                                 <td id='supervisor-details'><i class='bi bi-info-circle-fill'></i>" . $row['ojt_employee_name'] . "<br>
-                                  <button class='btn btn-primary'data-bs-toggle='modal' data-bs-target='#viewnote-modal' id='btn-viewnote' type='button'><i class='bi bi-file-earmark-text-fill'></i> View Note</button>
+                                <button name='btn-view-note' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#viewnote-modal' id='btn-viewnote' type='button' data-ojt-employee-id='" . $row['ojt_employee_id'] . "'>
+                                   <i class='bi bi-file-earmark-text-fill'></i> View Note
+                               </button>                       
                                 </td>
                                 <td id='supervisor-phone'><i class='bi bi-telephone-fill'></i><a href='tel:" . $row['ojt_employee_phone'] . "'>" . $row['ojt_employee_phone'] . "</a></td>
                                 <td id='supervisor-email'><i class='bi bi-envelope-at-fill'></i><a href='mailto:" . $row['ojt_employee_email'] . "'>" . $row['ojt_employee_email'] . "</a></td>
@@ -171,18 +245,19 @@ if(isset($_POST['btn-set-status'])) {
                                     </div>
                                 </td>
                                 <td id='ojt-employee-quick-actions'>
-                                    <div class='dropdown'>
-                                        <button class='btn btn-primary dropdown-toggle' id='btn-qck' type='button' data-bs-toggle='dropdown'  >Quick Actions<span class='caret'></span></button>
-                                        <ul class='dropdown-menu'>
-                                            <li><a href='#'>Add Note</a></li>
-                                            <li><a href='#'>New Reminder</a></li>
-                                            <li><a href='#'>Trash Contact</a></li>
-                                            <li><a href='#'>Merge Contact</a></li>
-                                        </ul>
-                                    </div>
-                                </td>
+                                 <div class='dropdown'>
+                                    <button class='btn btn-primary dropdown-toggle' id='btn-qck' type='button' data-bs-toggle='dropdown'>
+                                    Quick Actions<span class='caret'></span>
+                                    </button>
+                                    <ul class='dropdown-menu'>
+                                    <li><a href='#' data-bs-toggle='modal' data-bs-target='#add-note-modal' data-employer-id='". $row['ojt_employee_id'] ."'>Add Note</a></li>
+                                    <li><a href='#' data-bs-toggle='modal' data-bs-target='#new-reminder-modal' data-employer-id='". $row['ojt_employee_id'] ."'>New Reminder</a></li>
+                                    <li><a href='#' data-bs-toggle='modal' data-bs-target='#trash-contact-modal' data-employer-id='". $row['ojt_employee_id'] ."'>Trash Contact</a></li>
+                                    <li><a href='#' data-bs-toggle='modal' data-bs-target='#merge-contact-modal' data-employer-id='". $row['ojt_employee_id'] ."'>Merge Contact</a></li>
+                                    </ul>
+                                 </div>
+                                 </td>
                             </tr>";
-
                             }
                             ?>
                         </table>
@@ -204,16 +279,20 @@ if(isset($_POST['btn-set-status'])) {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                <div class="profile-row-sec">
-                    <h4><span class="profile-info">Name:</span><?php echo $teacher_row['ojt_full_name']; ?></h4> <br>
-                    <h4><span class="profile-info">Username:</span><?php echo $teacher_row['ojt_teachers_username']; ?>
-                    </h4> <br>
-                    <h4><span class="profile-info">Phone:</span> <?php echo $teacher_row['ojt_teachers_phone']; ?> </h4><br>
-                    <h4><span class="profile-info">Email:</span><?php echo $teacher_row['ojt_teachers_email']; ?></h4>
-                    <!-- <br>
+                    <div class="profile-row-sec">
+                        <h4><span class="profile-info">Name:</span><?php echo $teacher_row['ojt_full_name']; ?></h4>
+                        <br>
+                        <h4><span
+                                class="profile-info">Username:</span><?php echo $teacher_row['ojt_teachers_username']; ?>
+                        </h4> <br>
+                        <h4><span class="profile-info">Phone:</span> <?php echo $teacher_row['ojt_teachers_phone']; ?>
+                        </h4><br>
+                        <h4><span class="profile-info">Email:</span><?php echo $teacher_row['ojt_teachers_email']; ?>
+                        </h4>
+                        <!-- <br>
                     <button class="trigger btn-btn-primary" id="btn-edit-profile">Edit</button>
                     <br> -->
-                </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -284,8 +363,74 @@ if(isset($_POST['btn-set-status'])) {
                 </div>
                 <div class="modal-body">
                     <div class="note-contents">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Note</th>
+                                    <th>Dated Added</th>
+                                </tr>
+                            </thead>
+                            <tbody id="note-table-body"></tbody>
+                        </table>
                     </div>
                 </div>
+                <div class='modal-footer'>
+                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick actions Modal -->
+    <!-- Add Note-->
+    <div class='modal fade' id='add-note-modal' tabindex='-1' aria-hidden='true'>
+        <div class='modal-dialog'>
+            <form method='POST' action='dashboard.php' id='add-note-form'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h5 class='modal-title'>Add Note</h5>
+                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                    </div>
+                    <div class='modal-body'>
+                        <div class='mb-3'>
+                            <?php if (!empty($addnote_msg)): ?>
+                            <div class="alert alert-success"><?php echo $addnote_msg; ?></div>
+                            <?php endif; ?>
+                            <label for='note-contents' class='form-label'>Note Contents</label>
+                            <textarea class='form-control' id='note-contents' name='note_contents'></textarea>
+                        </div>
+                        <input type='hidden' name='employer_id' id='employer_id' value=''>
+                    </div>
+                    <div class='modal-footer'>
+                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
+                        <button type='submit' name="btn-add-note" class='btn btn-primary'>Save changes</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class='modal' id='new-reminder-modal'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <!-- Add your modal content here -->
+            </div>
+        </div>
+    </div>
+
+    <div class='modal' id='trash-contact-modal'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <!-- Add your modal content here -->
+            </div>
+        </div>
+    </div>
+
+    <div class='modal' id='merge-contact-modal'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <!-- Add your modal content here -->
             </div>
         </div>
     </div>
@@ -397,6 +542,46 @@ if(isset($_POST['btn-set-status'])) {
         });
     });
     </script>
+
+    <!-- Add NOTE -->
+    <!-- Add a script to handle the form submission -->
+    <script>
+    $(document).ready(function() {
+        $('#add-note-modal, #new-reminder-modal, #trash-contact-modal, #merge-contact-modal').on(
+            'show.bs.modal',
+            function(event) {
+                var button = $(event.relatedTarget);
+                var employer_id = button.data('employer-id');
+                var modal = $(this);
+                modal.find('#employer_id').val(employer_id);
+            });
+    });
+    </script>
+    <!-- View Note -->
+    <script>
+$(document).ready(function() {
+    $('button[name="btn-view-note"]').click(function() {
+        var ojt_employee_id = $(this).data('ojt-employee-id');
+        $.ajax({
+            url: 'get_note.php',
+            method: 'POST',
+            data: {ojt_employee_id: ojt_employee_id},
+            success: function(response) {
+                var noteTableBody = $('#note-table-body');
+                noteTableBody.empty();
+                $.each(response, function(index, note) {
+                    noteTableBody.append('<tr><td>' + note.ojt_employee_note_contents + '</td><td>' + note.ojt_employee_note_created + '</td></tr>');
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    });
+});
+
+    </script>
+
 
 </body>
 

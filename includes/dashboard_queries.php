@@ -11,21 +11,7 @@ function getUserid($username){
     }
     return $row['ojt_teachers_id'] ;
 }
-/*
-function getEmployer($user_id){
-    global $conn;
-    $sql = "SELECT ojt_employee_name,ojt_employee_supervisor, ojt_employee_phone, ojt_employee_email,ojt_employee_address FROM ojt_employee WHERE ojt_teachers_id='$user_id'";
-    $result = mysqli_query($conn, $sql);
-    if ($result->num_rows > 0) {
-        // output data of each row
-        while($row = $result->fetch_assoc()) {
-            echo "<tr><td>".$row["ojt_employee_name"]."</td><td>".$row["ojt_employee_supervisor"]."</td><td>".$row["ojt_employee_phone"]."</td><td>".$row["ojt_employee_email"]."</td><td>".$row["ojt_employee_address"]."</td></tr>";
-        }
-    } else {
-        echo "<p>No Employer listed..</p>";
-    }
-}
-*/
+
 function getEmployers($user_id){
     global $conn;
     $sql = "SELECT ojt_employee_id,ojt_employee_name,ojt_employee_status,ojt_employee_supervisor, ojt_employee_phone, ojt_employee_email,ojt_employee_address FROM ojt_employee WHERE ojt_teachers_id='$user_id'";
@@ -51,5 +37,17 @@ function updateStatus($employee_id, $new_status){
     return $result;
 }
 
-
-?>
+function get_note() {
+    global $conn;
+    $ojt_employee_id = $_POST['ojt_employee_id'];
+    $sql = "SELECT ojt_employee_note_contents, ojt_employee_note_created FROM ojt_employee_status WHERE ojt_employee_id = '$ojt_employee_id'";
+    $result = mysqli_query($conn, $sql);
+    if (!$result) {
+        die("Query failed: " . mysqli_error($conn));
+    }
+    $notes = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $notes[] = $row;
+    }
+    return $notes;
+}

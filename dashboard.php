@@ -202,7 +202,7 @@ if (isset($_POST['btn-add-note'])) {
                                 echo "<tr>
                                 <td id='supervisor-details'><i class='bi bi-info-circle-fill'></i>" . $row['ojt_employee_name'] . "<br>
 
-                                <button id='btn-viewnote' data-bs-toggle='modal' data-bs-target='#viewnote-modal' data-ojt-employee-note-id='" . $row['ojt_employee_id'] . "' onclick='updateURLParam(\"ojt_employee_id-notes\", " . $row['ojt_employee_id'] . ")'>
+                                <button id='btn-viewnote' data-bs-toggle='modal' data-bs-target='#viewnote-modal' data-ojt-employee-note-id='" . $row['ojt_employee_id'] . "' onclick='updateURLParam(\"view_notes\", " . $row['ojt_employee_id'] . ")'>
                                 <i class='bi bi-file-earmark-text-fill'></i> View Note
                                 </button>
                               

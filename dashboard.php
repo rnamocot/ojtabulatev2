@@ -128,38 +128,6 @@ if (isset($_POST['btn-add-note'])) {
 
 // View Notes
 
-
-// Check if the "View Note" button was clicked
-if (isset($_POST['btn-view-note'])) {
-  // Get the employee ID from the clicked button's data attribute
-  $employee_id = $_POST['data-row-id'];
-
-  // Prepare a SELECT query to retrieve the note contents for the specified employee ID
-  $sql = "SELECT ojt_employee_note_contents
-          FROM ojt_employee_notes
-          WHERE ojt_employee_id = $employee_id";
-
-  // Check if any rows were returned
-  if (mysqli_num_rows($result) > 0) {
-    // Retrieve the note contents from the first row of the result
-    $row = mysqli_fetch_assoc($result);
-    $note_contents = $row['ojt_employee_note_contents'];
-
-    // Display the note contents in the "note-contents" div inside the "View Note" modal
-    echo "<script>
-            document.querySelector('#viewnote-modal .note-contents').innerHTML = '$note_contents';
-          </script>";
-  } else {
-    // No rows were returned, display an error message
-    echo "<div class='alert alert-danger' role='alert'>No note found for employee ID $employee_id.</div>";
-  }
-
-  // Close the database connection
-  mysqli_close($conn);
-}
-
-
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -233,9 +201,12 @@ if (isset($_POST['btn-view-note'])) {
                             while ($row = mysqli_fetch_assoc($employer_list)) {
                                 echo "<tr>
                                 <td id='supervisor-details'><i class='bi bi-info-circle-fill'></i>" . $row['ojt_employee_name'] . "<br>
-                                <button name='btn-view-note' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#viewnote-modal' id='btn-viewnote' type='button' data-ojt-employee-id='" . $row['ojt_employee_id'] . "'>
-                                   <i class='bi bi-file-earmark-text-fill'></i> View Note
-                               </button>                       
+
+                                <button id='btn-viewnote' data-bs-toggle='modal' data-bs-target='#viewnote-modal' data-ojt-employee-note-id='" . $row['ojt_employee_id'] . "' onclick='updateURLParam(\"ojt_employee_id-notes\", " . $row['ojt_employee_id'] . ")'>
+                                <i class='bi bi-file-earmark-text-fill'></i> View Note
+                                </button>
+                              
+                            
                                 </td>
                                 <td id='supervisor-phone'><i class='bi bi-telephone-fill'></i><a href='tel:" . $row['ojt_employee_phone'] . "'>" . $row['ojt_employee_phone'] . "</a></td>
                                 <td id='supervisor-email'><i class='bi bi-envelope-at-fill'></i><a href='mailto:" . $row['ojt_employee_email'] . "'>" . $row['ojt_employee_email'] . "</a></td>
@@ -355,31 +326,33 @@ if (isset($_POST['btn-view-note'])) {
     <!-- View Note modal -->
     <div class="modal fade" id="viewnote-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Note List</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Note List</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="note-contents">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Note</th>
+                                <th>Dated Added</th>
+                            </tr>
+                        </thead>
+                        <tbody id="note-list">
+                            <!-- I use ajax to display the data here -->
+                        </tbody>
+                    </table>
                 </div>
-                <div class="modal-body">
-                    <div class="note-contents">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Note</th>
-                                    <th>Dated Added</th>
-                                </tr>
-                            </thead>
-                            <tbody id="note-table-body"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class='modal-footer'>
-                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
-                </div>
+            </div>
+            <div class='modal-footer'>
+                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Quick actions Modal -->
     <!-- Add Note-->
@@ -558,29 +531,46 @@ if (isset($_POST['btn-view-note'])) {
     });
     </script>
     <!-- View Note -->
-    <script>
-$(document).ready(function() {
-    $('button[name="btn-view-note"]').click(function() {
-        var ojt_employee_id = $(this).data('ojt-employee-id');
-        $.ajax({
-            url: 'get_note.php',
-            method: 'POST',
-            data: {ojt_employee_id: ojt_employee_id},
-            success: function(response) {
-                var noteTableBody = $('#note-table-body');
-                noteTableBody.empty();
-                $.each(response, function(index, note) {
-                    noteTableBody.append('<tr><td>' + note.ojt_employee_note_contents + '</td><td>' + note.ojt_employee_note_created + '</td></tr>');
-                });
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            }
-        });
+<script>
+    function updateURLParam(paramName, paramValue) {
+        var url = new URL(window.location.href);
+        url.searchParams.set(paramName, paramValue);
+        window.history.replaceState(null, null, url);
+    }
+</script>
+
+<script>
+    $(document).on('show.bs.modal', '#viewnote-modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var ojt_employee_id = button.data('ojt-employee-note-id'); // Extract ojt_employee_id from data-* attributes
+
+    // Make AJAX request to fetch data from database
+    $.ajax({
+        url: 'view_note.php',
+        type: 'POST',
+        data: { ojt_employee_id: ojt_employee_id },
+        dataType: 'json',
+        success: function (data) {
+            // Populate the modal with the returned data
+            var noteList = $('#note-list');
+            noteList.empty(); // Clear the list before adding new data
+
+            $.each(data, function (index, note) {
+                var row = $('<tr>');
+                row.append($('<td>').text(note.ojt_employee_note_contents));
+                row.append($('<td>').text(note.ojt_employee_note_created));
+                noteList.append(row);
+            });
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            console.log('Error fetching data from server: ' + errorThrown);
+        }
     });
 });
 
-    </script>
+</script>
+
+
 
 
 </body>

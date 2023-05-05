@@ -74,13 +74,13 @@ if (isset($_POST['btn-edit-profile'])) {
 
 //Update status
 
-if(isset($_POST['btn-set-status'])) {
+if (isset($_POST['btn-set-status'])) {
     $status = mysqli_real_escape_string($conn, $_POST['status']);
     $ojt_employee_id = mysqli_real_escape_string($conn, $_POST['ojt_employee_id']);
-  
+
     $sql = "UPDATE ojt_employee SET ojt_employee_status='$status' WHERE ojt_employee_id='$ojt_employee_id'";
     $result = mysqli_query($conn, $sql);
-    if($result) {
+    if ($result) {
         header("location: dashboard.php");
     } else {
         echo "Error updating record: " . mysqli_error($conn);
@@ -91,23 +91,23 @@ if(isset($_POST['btn-set-status'])) {
 if (isset($_POST['btn-add-note'])) {
     // Get the employer ID from the form
     $employer_id = $_POST['employer_id'];
-  
+
     // Get the note contents from the form
     $note_contents = $_POST['note_contents'];
-  
+
     // Check if the note contents is not empty
     if (!empty($note_contents)) {
         // Check for errors
         if ($conn->connect_error) {
             die('Connection failed: ' . $conn->connect_error);
         }
-      
+
         // Prepare the SQL query
         $stmt = $conn->prepare("INSERT INTO ojt_employee_notes (ojt_employee_note_contents,ojt_employee_id) VALUES (?, ?)");
-      
+
         // Bind the parameters to the query
         $stmt->bind_param("ss", $note_contents, $employer_id);
-      
+
         // Execute the query
         if ($stmt->execute()) {
             // The note was added successfully
@@ -116,7 +116,7 @@ if (isset($_POST['btn-add-note'])) {
             // There was an error adding the note
             $addnote_msg = "Error adding note: " . $stmt->error;
         }
-      
+
         // Close the statement and connection
         $stmt->close();
         $conn->close();
@@ -198,8 +198,8 @@ if (isset($_POST['btn-add-note'])) {
                             </tr>
                             <!-- call the getEmployer method to display employee data -->
                             <?php
-                            while ($row = mysqli_fetch_assoc($employer_list)) {
-                                echo "<tr>
+while ($row = mysqli_fetch_assoc($employer_list)) {
+    echo "<tr>
                                 <td id='supervisor-details'><i class='bi bi-info-circle-fill'></i>" . $row['ojt_employee_supervisor'] . "<br>
                                 <span id='employer-details-sp'><i id='employer-details' class='bi bi-person-square'></i>" . $row['ojt_employee_name'] . " </span> <br>
                                 <span id='student-details-sp'><i id='student-details' class='bi bi-mortarboard-fill'></i>" . $row['ojt_employee_student'] . " </span><br>
@@ -207,13 +207,13 @@ if (isset($_POST['btn-add-note'])) {
                                 <button id='btn-viewnote' data-bs-toggle='modal' data-bs-target='#viewnote-modal' data-ojt-employee-note-id='" . $row['ojt_employee_id'] . "' onclick='updateURLParam(\"view_notes\", " . $row['ojt_employee_id'] . ")'>
                                 <i class='bi bi-file-earmark-text-fill'></i> View Note
                                 </button>
-                              
-                            
+
+
                                 </td>
                                 <td id='supervisor-phone'><i class='bi bi-telephone-fill'></i><a href='tel:" . $row['ojt_employee_phone'] . "'>" . $row['ojt_employee_phone'] . "</a></td>
                                 <td id='supervisor-email'><i class='bi bi-envelope-at-fill'></i><a href='mailto:" . $row['ojt_employee_email'] . "'>" . $row['ojt_employee_email'] . "</a></td>
                                 <td id='ojt-employee-status'>
-                                   <button class='btn btn-status-db btn-primary dropdown-toggle' id='btn-status-". $row['ojt_employee_id'] ."' type='button' data-bs-toggle='modal' data-bs-target='#edit-status-modal' data-ojt-employee-id='". $row['ojt_employee_id'] ."'>". $row['ojt_employee_status'] ."<span class='caret'></span></button>
+                                   <button class='btn btn-status-db btn-primary dropdown-toggle' id='btn-status-" . $row['ojt_employee_id'] . "' type='button' data-bs-toggle='modal' data-bs-target='#edit-status-modal' data-ojt-employee-id='" . $row['ojt_employee_id'] . "'>" . $row['ojt_employee_status'] . "<span class='caret'></span></button>
                                 </td>
                                     </div>
                                 </td>
@@ -223,16 +223,16 @@ if (isset($_POST['btn-add-note'])) {
                                     Quick Actions<span class='caret'></span>
                                     </button>
                                     <ul class='dropdown-menu'>
-                                    <li><a href='#' data-bs-toggle='modal' data-bs-target='#add-note-modal' data-employer-id='". $row['ojt_employee_id'] ."'>Add Note</a></li>
-                                    <li><a href='#' data-bs-toggle='modal' data-bs-target='#new-reminder-modal' data-employer-id='". $row['ojt_employee_id'] ."'>New Reminder</a></li>
-                                    <li><a href='#' data-bs-toggle='modal' data-bs-target='#trash-contact-modal' data-employer-id='". $row['ojt_employee_id'] ."'>Trash Contact</a></li>
-                                    <li><a href='#' data-bs-toggle='modal' data-bs-target='#merge-contact-modal' data-employer-id='". $row['ojt_employee_id'] ."'>Merge Contact</a></li>
+                                    <li><a href='#' data-bs-toggle='modal' data-bs-target='#add-note-modal' data-employer-id='" . $row['ojt_employee_id'] . "'>Add Note</a></li>
+                                    <li><a href='#' data-bs-toggle='modal' data-bs-target='#new-reminder-modal' data-employer-id='" . $row['ojt_employee_id'] . "'>New Reminder</a></li>
+                                    <li><a href='#' data-bs-toggle='modal' data-bs-target='#trash-contact-modal' data-employer-id='" . $row['ojt_employee_id'] . "'>Trash Contact</a></li>
+                                    <li><a href='#' data-bs-toggle='modal' data-bs-target='#merge-contact-modal' data-employer-id='" . $row['ojt_employee_id'] . "'>Merge Contact</a></li>
                                     </ul>
                                  </div>
                                  </td>
                             </tr>";
-                            }
-                            ?>
+}
+?>
                         </table>
                     </div>
                 </div>
@@ -370,7 +370,7 @@ if (isset($_POST['btn-add-note'])) {
                         <div class='mb-3'>
                             <?php if (!empty($addnote_msg)): ?>
                             <div class="alert alert-success"><?php echo $addnote_msg; ?></div>
-                            <?php endif; ?>
+                            <?php endif;?>
                             <label for='note-contents' class='form-label'>Note Contents</label>
                             <textarea class='form-control' id='note-contents' name='note_contents'></textarea>
                         </div>
@@ -424,41 +424,56 @@ if (isset($_POST['btn-add-note'])) {
                     <section id="qr-code">
                         <div class="qr-db-content">
                             <h1 id="qr-h1">Supervisor Registration Form</h1>
-                            <h4><span style="color:#0D6EFD;">Note:</span> Scan this code to generate link.
+                            <h4><span style="color:#0D6EFD;">Note:</span> Scan this code to generate link.<br><br>
+                                     <span style="color:#0D6EFD;">Note for sending via email:</span> Download the QR code first and attach it on your email body.
                             </h4>
                             <?php
-                    function generateQRCodeLink($url, $user_id)
-                    {
-                        // Append the username to the URL
-                        $url .= '?teacher=' . urlencode($user_id); //username is from session
-                        // Generate QR code using qrcode.js library
-                        echo '<div id="qrcode"></div>';
-                        echo '<script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>';
-                        echo '<script>';
-                        echo 'new QRCode(document.getElementById("qrcode"), "' . $url . '");';
-                        echo '</script>';
-                        // Add save button to download QR code image
-                        echo '<button id="save_btn">Save QR Code</button>';
-                        // JavaScript to save QR code image when "Save QR Code" button is clicked
-                        echo '<script>';
-                        echo 'var saveBtn = document.getElementById("save_btn");';
-                        echo 'var canvas = document.querySelector("canvas");';
-                        echo 'saveBtn.addEventListener("click", function() {';
-                        echo 'var dataUrl = canvas.toDataURL();';
-                        echo 'var filename = "QR Code.png";';
-                        echo 'saveBtn.innerHTML = "Downloading...";';
-                        echo 'saveBtn.disabled = true;';
-                        echo 'var link = document.createElement("a");';
-                        echo 'link.download = filename;';
-                        echo 'link.href = dataUrl;';
-                        echo 'link.click();';
-                        echo 'saveBtn.innerHTML = "Save QR Code";';
-                        echo 'saveBtn.disabled = false;';
-                        echo '});';
-                        echo '</script>';
-                    }
-                    generateQRCodeLink('https://ojtabulate.com/supervisor.php', $user_id);
-                    ?>
+                                function generateQRCodeLink($url, $user_id)
+                                {
+                                ?>
+                                <div id="qrcode"></div>
+                                <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+                                <script>
+                                    new QRCode(document.getElementById("qrcode"), "<?php echo $url ?>?teacher=<?php echo urlencode($user_id) ?>");
+                                </script>
+                                <button id="save_btn">Download</button>
+                                <button id="email_btn">Send to Email</button>
+                                <script>
+                                    var saveBtn = document.getElementById("save_btn");
+                                    var emailBtn = document.getElementById("email_btn");
+                                    var canvas = document.getElementById("qrcode").getElementsByTagName("canvas")[0];
+                                    saveBtn.addEventListener("click", function() {
+                                        var dataUrl = canvas.toDataURL();
+                                        var filename = "QR Code.png";
+                                        saveBtn.innerHTML = "Downloading...";
+                                        saveBtn.disabled = true;
+                                        var link = document.createElement("a");
+                                        link.download = filename;
+                                        link.href = dataUrl;
+                                        link.click();
+                                        saveBtn.innerHTML = "Save QR Code";
+                                        saveBtn.disabled = false;
+                                    });
+                                    emailBtn.addEventListener("click", function() {
+                                        var dataUrl = canvas.toDataURL();
+                                        var recipient = ""; // replace with email address of recipient
+                                        var subject = "QR Code - Supervisor Registration"; // replace with subject of email
+                                        var body = 'Insert and attach your downloaded QR CODE image here'; // embed QR code image in email body
+                                        var link = document.createElement("a");
+                                        link.href = "mailto:" + recipient + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+                                        document.body.appendChild(link);
+                                        link.click();
+                                        document.body.removeChild(link);
+                                    });
+                                </script>
+                                <?php
+                                }
+                                generateQRCodeLink('https://ojtabulate.com/supervisor.php', $user_id);
+                                ?>
+
+
+
+
                         </div>
                     </section>
                 </div>

@@ -214,6 +214,15 @@ ul.dropdown-menu.show {
     padding: 20px;
     background-color: #dfbd63;
     border-radius: 10px;
+    text-align: left;
+}
+button#email_btn {
+    margin-top: 20px;
+    padding: 10px 30px;
+    border: none;
+    background-color: #d4a62e;
+    color: #fff;
+    border-radius: 10px;
 }
 button#save_btn {
     margin-top: 20px;

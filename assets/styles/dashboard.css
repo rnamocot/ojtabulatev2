@@ -96,6 +96,13 @@ i.bi.bi-file-earmark-text-fill {
 td#supervisor-details {
     font-weight: 600;
 }
+span#employer-details-sp {
+    color: #349879;
+}
+span#student-details-sp {
+    color: #081c7e;
+}
+
 table{
     width: 100%;
 }

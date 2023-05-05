@@ -203,6 +203,7 @@ while ($row = mysqli_fetch_assoc($employer_list)) {
                                 <td id='supervisor-details'><i class='bi bi-info-circle-fill'></i>" . $row['ojt_employee_supervisor'] . "<br>
                                 <span id='employer-details-sp'><i id='employer-details' class='bi bi-person-square'></i>" . $row['ojt_employee_name'] . " </span> <br>
                                 <span id='student-details-sp'><i id='student-details' class='bi bi-mortarboard-fill'></i>" . $row['ojt_employee_student'] . " </span><br>
+                                <span id='address-details-sp'><i id='address-details' class='bi bi-geo-alt-fill'></i>" . $row['ojt_employee_address'] . " </span><br>
 
                                 <button id='btn-viewnote' data-bs-toggle='modal' data-bs-target='#viewnote-modal' data-ojt-employee-note-id='" . $row['ojt_employee_id'] . "' onclick='updateURLParam(\"view_notes\", " . $row['ojt_employee_id'] . ")'>
                                 <i class='bi bi-file-earmark-text-fill'></i> View Note

@@ -216,6 +216,9 @@ ul.dropdown-menu.show {
     border-radius: 10px;
     text-align: left;
 }
+i#address-details {
+    color: #c53555;
+}
 button#email_btn {
     margin-top: 20px;
     padding: 10px 30px;

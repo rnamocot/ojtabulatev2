@@ -85,10 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btn-employee-reg'])) 
                 <div class="col-md-6">
                     <div class="card main-login-card">
                         <div class="card-body">
-                        <h4 class="card-title mb-4">Supervisor Registration Form</h4>
+                        <h4 class="card-title mb-4">Supervisor Registration Form:</h4>
                             <form method="POST" action="">
                                 <div class="form-group">
-                                    <label for="employeeName">Business/Corporation Name</label>
+                                    <label for="employeeName">Business/Corporation Name:</label>
                                     <input type="text" class="form-control" id="employeeName" name="employeename" placeholder="Enter Business/Corporation Name"
                                         required>
                                 </div>
@@ -103,11 +103,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btn-employee-reg'])) 
                                         required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="phone">Supervisor business number:</label>
+                                    <label for="phone">Supervisor Business Number:</label>
                                     <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter Phone Number" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="phone">Supervisor cell  number:</label>
+                                    <label for="phone">Supervisor Cell  Number:</label>
                                     <input type="tel" class="form-control" id="cellnumber" name="cellnumber" placeholder="Enter Phone Number" required>
                                 </div>
                                 <div class="form-group">

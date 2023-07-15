@@ -212,8 +212,8 @@ while ($row = mysqli_fetch_assoc($employer_list)) {
 
                                 </td>
                                 <td id='supervisor-phone'>
-                                <i class='bi bi-telephone-fill'></i>B#<a href='tel:" . $row['ojt_employee_phone'] . "'>" . $row['ojt_employee_phone'] . "</a>
-                                <i class='bi bi-telephone-fill'></i>S#<a href='tel:" . $row['ojt_employee_cell'] . "'>" . $row['ojt_employee_cell'] . "</a>
+                                <i class='bi bi-telephone-fill'></i> B# <a href='tel:" . $row['ojt_employee_phone'] . "'>" . $row['ojt_employee_phone'] . "</a><br>
+                                <i class='bi bi-telephone-fill'></i> S# <a href='tel:" . $row['ojt_employee_cell'] . "'>" . $row['ojt_employee_cell'] . "</a>
                                 </td>
                                 <td id='supervisor-email'><i class='bi bi-envelope-at-fill'></i><a href='mailto:" . $row['ojt_employee_email'] . "'>" . $row['ojt_employee_email'] . "</a></td>
                                 <td id='ojt-employee-status'>

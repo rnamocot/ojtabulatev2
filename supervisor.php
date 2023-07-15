@@ -16,12 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btn-employee-reg'])) 
   $supervisor_name = $_POST['supervisorname'];
   $student_name = $_POST['studentname'];
   $phone = $_POST['phone'];
+  $cellnumber = $_POST['cellnumber'];
   $email = $_POST['email'];
   $address = $_POST['address'];
   $teacher_id= $_POST['teacher_id'];
 
   // Insert the data into the database
-  $sql = "INSERT INTO `ojt_employee` (`ojt_employee_name`, `ojt_employee_supervisor`,`ojt_employee_student`, `ojt_employee_phone`, `ojt_employee_email`, `ojt_employee_address`, `ojt_teachers_id`) VALUES ('$employee_name', '$supervisor_name','$student_name', '$phone', '$email', '$address', '$teacher_id')";
+  $sql = "INSERT INTO `ojt_employee` (`ojt_employee_name`, `ojt_employee_supervisor`,`ojt_employee_student`, `ojt_employee_phone`, `ojt_employee_cell`, `ojt_employee_email`, `ojt_employee_address`, `ojt_teachers_id`) VALUES ('$employee_name', '$supervisor_name','$student_name', '$phone','$cellnumber',  '$email', '$address', '$teacher_id')";
   $result = $conn->query($sql);
   // Check if the query was successful
   if ($result) {
@@ -87,8 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btn-employee-reg'])) 
                         <h4 class="card-title mb-4">Supervisor Registration Form</h4>
                             <form method="POST" action="">
                                 <div class="form-group">
-                                    <label for="employeeName">Employee Name:</label>
-                                    <input type="text" class="form-control" id="employeeName" name="employeename" placeholder="Enter Employee Name"
+                                    <label for="employeeName">Business/Corporation Name</label>
+                                    <input type="text" class="form-control" id="employeeName" name="employeename" placeholder="Enter Business/Corporation Name"
                                         required>
                                 </div>
                                 <div class="form-group">
@@ -97,13 +98,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['btn-employee-reg'])) 
                                         required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="yourName">Students Name:</label>
+                                    <label for="yourName">Student Name:</label>
                                     <input type="text" class="form-control" id="studentName" name="studentname" placeholder="Enter Student Full Name"
                                         required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="phone">Phone #:</label>
+                                    <label for="phone">Supervisor business number:</label>
                                     <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter Phone Number" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Supervisor cell  number:</label>
+                                    <input type="tel" class="form-control" id="cellnumber" name="cellnumber" placeholder="Enter Phone Number" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email:</label>

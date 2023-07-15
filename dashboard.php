@@ -211,7 +211,10 @@ while ($row = mysqli_fetch_assoc($employer_list)) {
 
 
                                 </td>
-                                <td id='supervisor-phone'><i class='bi bi-telephone-fill'></i><a href='tel:" . $row['ojt_employee_phone'] . "'>" . $row['ojt_employee_phone'] . "</a></td>
+                                <td id='supervisor-phone'>
+                                <i class='bi bi-telephone-fill'></i>B#<a href='tel:" . $row['ojt_employee_phone'] . "'>" . $row['ojt_employee_phone'] . "</a>
+                                <i class='bi bi-telephone-fill'></i>S#<a href='tel:" . $row['ojt_employee_cell'] . "'>" . $row['ojt_employee_cell'] . "</a>
+                                </td>
                                 <td id='supervisor-email'><i class='bi bi-envelope-at-fill'></i><a href='mailto:" . $row['ojt_employee_email'] . "'>" . $row['ojt_employee_email'] . "</a></td>
                                 <td id='ojt-employee-status'>
                                    <button class='btn btn-status-db btn-primary dropdown-toggle' id='btn-status-" . $row['ojt_employee_id'] . "' type='button' data-bs-toggle='modal' data-bs-target='#edit-status-modal' data-ojt-employee-id='" . $row['ojt_employee_id'] . "'>" . $row['ojt_employee_status'] . "<span class='caret'></span></button>
